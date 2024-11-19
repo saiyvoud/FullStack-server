@@ -4,6 +4,7 @@ import { EMessage, SMessage } from "../service/message.js";
 import { SendError, SendCreate, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid";
+import { DATETIME } from "../config/globalKey.js";
 export default class CategoryController {
   static async SelectOne(req, res) {
     try {
@@ -27,7 +28,7 @@ export default class CategoryController {
         return SendSuccess(res, SMessage.SelectAll, result);
       });
     } catch (error) {
-      console.log(error);
+    
       return SendError(res, 500, EMessage.Eserver, error);
     }
   }
@@ -57,13 +58,10 @@ export default class CategoryController {
       connected.query(checkCategoryID, categoryID, (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound, err);
         if (!result[0]) return SendError(res, 404, EMessage.NotFound);
-        const datetime = new Date()
-        .toISOString()
-        .replace(/T/, " ")
-        .replace(/\..+/, "");
+       
         const updated =
           "Update category set categoryName=? , updatedAt=? where categoryID=?";
-        connected.query(updated, [categoryName, datetime], (errUpdate) => {
+        connected.query(updated, [categoryName, DATETIME,categoryID], (errUpdate) => {
           if (errUpdate) return SendError(res, 404, EMessage.NotFound);
           return SendSuccess(res, SMessage.Updated);
         });

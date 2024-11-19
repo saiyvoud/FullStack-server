@@ -19,13 +19,13 @@ export const VerifyToken = async (token) => {
         const checkUserID = "select * from user where userID=?";
         connected.query(checkUserID, decode['id'], (isErr, result) => {
           if (isErr) reject(isErr);
-          console.log(result[0]['userID']);
+          
           if (!result[0]) reject(EMessage.NotFound);
           resovle(result[0]["userID"]);
         });
       });
     } catch (error) {
-      console.log(error);
+    
       reject(error);
     }
   });
@@ -49,7 +49,7 @@ export const GenerateToken = async (data) => {
       }
       resovle({ token, refreshToken });
     } catch (error) {
-      console.log(error);
+    
       reject(error);
     }
   });

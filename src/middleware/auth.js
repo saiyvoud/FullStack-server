@@ -17,7 +17,7 @@ export const auth = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
+   
     return SendError(res, 500, EMessage.Uaunthorizate, error);
   }
 };

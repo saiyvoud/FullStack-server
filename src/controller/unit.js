@@ -4,6 +4,7 @@ import { EMessage, SMessage } from "../service/message.js";
 import { SendError, SendCreate, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid";
+import { DATETIME } from "../config/globalKey.js";
 export default class UnitController {
   static async SelectOne(req, res) {
     try {
@@ -14,6 +15,7 @@ export default class UnitController {
         if (!result[0]) return SendError(res, 404, EMessage.NotFound);
         return SendSuccess(res, SMessage.SelectOne, result[0]);
       });
+      
     } catch (error) {
       return SendError(res, 500, EMessage.Eserver, error);
     }
@@ -27,7 +29,7 @@ export default class UnitController {
         return SendSuccess(res, SMessage.SelectAll, result);
       });
     } catch (error) {
-      console.log(error);
+  
       return SendError(res, 500, EMessage.Eserver, error);
     }
   }
@@ -57,13 +59,9 @@ export default class UnitController {
       connected.query(checkunitID, unitID, (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound, err);
         if (!result[0]) return SendError(res, 404, EMessage.NotFound);
-        const datetime = new Date()
-          .toISOString()
-          .replace(/T/, " ")
-          .replace(/\..+/, "");
         const updated =
           "Update unit set unitName=? , updatedAt=? where unitID=?";
-        connected.query(updated, [unitName, datetime], (errUpdate) => {
+        connected.query(updated, [unitName, DATETIME,unitID], (errUpdate) => {
           if (errUpdate) return SendError(res, 404, EMessage.NotFound);
           return SendSuccess(res, SMessage.Updated);
         });

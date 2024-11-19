@@ -13,14 +13,11 @@ cloudinary.v2.config({
 
 export const UploadImageToCloud = async (files, type, oldImg) => {
   try {
-    // if (oldImg) {
-    //   // const spliturl = oldImg.split("/");
-    //   // const img_id = spliturl[spliturl.length - 1].split(".")[0];
-    //   // await cloudinary.v2.uploader.destroy(img_id);
-    //   const spliturl = oldImg.split("/");
-    //   const img_id = spliturl[spliturl.length - 1].split(".")[0];
-    //   await cloudinary.uploader.destroy(img_id);
-    // }
+    if (oldImg) {
+      const spliturl = oldImg.split("/");
+      const img_id = spliturl[spliturl.length - 1].split(".")[0];
+      await cloudinary.uploader.destroy(img_id);
+    }
     const base64 = files.toString("base64");
     const imgPath = `data:${type};base64,${base64}`;
     const cloudinaryUpload = await cloudinary.v2.uploader.upload(imgPath, {

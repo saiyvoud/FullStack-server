@@ -28,7 +28,7 @@ export default class EmployeeController {
         return SendSuccess(res, SMessage.SelectAll, result);
       });
     } catch (error) {
-      console.log(error);
+
       return SendError(res, 500, EMessage.Eserver, error);
     }
   }
@@ -139,8 +139,8 @@ export default class EmployeeController {
   static async updateDocImage(req, res) {
     try {
       const emplyID = req.params.emplyID;
-      // const oldDocImage = req.body;
-      // if (!oldDocImage) return SendError(res, 400, EMessage.BadRequest);
+      // const oldImage = req.body;
+      // if (!oldImage) return SendError(res, 400, EMessage.BadRequest);
 
       const newDocImage = req.files;
       if (!newDocImage || !newDocImage.newDocImage) {
@@ -154,7 +154,7 @@ export default class EmployeeController {
         const img_url = await UploadImageToCloud(
           newDocImage.newDocImage.data,
           newDocImage.newDocImage.mimetype,
-          // oldDocImage
+          // oldImage
         );
         if (!img_url) {
           return SendError(res, 404, EMessage.EUpload, img_url);

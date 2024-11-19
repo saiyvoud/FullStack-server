@@ -35,10 +35,10 @@ router.delete(`${category}/delete/:categoryID`,auth,CategoryController.deletecat
 // ------ unit ------
 const unit = "/unit";
 router.get(`${unit}/getAll`,auth,UnitController.SelectAll);
-router.get(`${unit}/getOne/:categoryID`,auth,UnitController.SelectOne);
+router.get(`${unit}/getOne/:unitID`,auth,UnitController.SelectOne);
 router.post(`${unit}/insert`,auth,UnitController.insert);
-router.put(`${unit}/update/:categoryID`,auth,UnitController.updateunit);
-router.delete(`${unit}/delete/:categoryID`,auth,UnitController.deleteunit);
+router.put(`${unit}/update/:unitID`,auth,UnitController.updateunit);
+router.delete(`${unit}/delete/:unitID`,auth,UnitController.deleteunit);
 //------- banner ------
 const banner = "/banner";
 router.get(`${banner}/getAll`,auth,BannerController.SelectAll);

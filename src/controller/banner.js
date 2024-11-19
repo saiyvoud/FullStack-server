@@ -27,7 +27,7 @@ export default class BannerController {
         return SendSuccess(res, SMessage.SelectAll, result);
       });
     } catch (error) {
-      console.log(error);
+     
       return SendError(res, 500, EMessage.Eserver, error);
     }
   }
@@ -41,8 +41,7 @@ export default class BannerController {
       }
       const img_url = await UploadImageToCloud(
         data.image.data,
-        data,
-        image.mimetype
+        data.image.mimetype
       );
       const bannerID = uuidv4();
       if (!img_url) return SendError(res, 404, EMessage.NotFound);
@@ -58,8 +57,8 @@ export default class BannerController {
   static async updatedBanner(req, res) {
     try {
       const bannerID = req.params.bannerID;
-      const { title, oldImage } = req.body;
-      const validate = await ValidateData({ title, oldImage });
+      const { title,oldImage } = req.body;
+      const validate = await ValidateData({ title,oldImage });
       if (validate.length > 0) {
         return SendError(res, 400, EMessage.BadRequest);
       }
@@ -74,8 +73,7 @@ export default class BannerController {
         if (!result[0]) return SendError(res, 400, EMessage.NotFound);
         const img_url = await UploadImageToCloud(
           data.image.data,
-          data,
-          image.mimetype,
+          data.image.mimetype,
           oldImage
         );
         if (!img_url) return SendError(res, 404, EMessage.NotFound);
