@@ -9,6 +9,12 @@ export const SMessage = {
  Login: "Login Success",
  Register: "Register Success",
  EmailAlready: "Email Already",
+ UserAlready: "User Already",
+ SelectOne: "Select One Success",
+ SelectAll: "Select All Success",
+ Insert: "Insert Success",
+ Updated: "Updated Success",
+ Delete: "Delete Success",
 }
 //Error Message
 export const EMessage = {
@@ -17,5 +23,10 @@ export const EMessage = {
  NotFound: "Not Found",
  IsMatch: "Password not match",
  EToken: "Error Generate Token",
- ERegister: "Error Register"
+ ERegister: "Error Register",
+ EInsert: "Faild Insert",
+ Eupdate: "Faild Update",
+ Edelet: "Faild Delete",
+ Uaunthorizate: "Invaild Uaunthorizate",
+ EUpload: "Error Upload Image",
 }
