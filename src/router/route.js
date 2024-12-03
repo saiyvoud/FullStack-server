@@ -2,6 +2,8 @@ import express from "express";
 import BannerController from "../controller/banner.js";
 import CategoryController from "../controller/category.js";
 import EmployeeController from "../controller/employee.js";
+import ProductController from "../controller/product.js";
+import TableController from "../controller/table.js";
 import UnitController from "../controller/unit.js";
 import UserCotroller from "../controller/user.controller.js";
 import {auth} from "../middleware/auth.js"
@@ -46,4 +48,21 @@ router.get(`${banner}/getOne/:bannerID`,auth,BannerController.SelectOne);
 router.post(`${banner}/insert`,auth,BannerController.insert);
 router.put(`${banner}/update/:bannerID`,auth,BannerController.updatedBanner);
 router.delete(`${banner}/delete/:bannerID`,auth,BannerController.deleteBanner);
+//------ product -----
+const product = "/product";
+router.get(`${product}/getAll`,auth,ProductController.SelectAll);
+router.get(`${product}/getOne/:productID`,auth,ProductController.SelectOne);
+router.get(`${product}/getByCategory/:categoryID`,auth,ProductController.SelectByCategory);
+router.post(`${product}/insert`,auth,ProductController.insert);
+router.put(`${product}/update/:productID`,auth,ProductController.updateProduct);
+router.put(`${product}/updateStatus/:productID`,auth,ProductController.updateStatus);
+router.delete(`${product}/delete/:productID`,auth,ProductController.deleteProduct);
+//-------- table ------
+const table ="/tables" 
+router.get(`${table}/getAll`,auth,TableController.SelectAll);
+router.get(`${table}/getOne/:tableID`,auth,TableController.SelectOne);
+router.post(`${table}/insert`,auth,TableController.insert);
+router.put(`${table}/open/:tableID`,auth,TableController.OpenTable);
+router.put(`${table}/close/:tableID`,auth,TableController.CloseTable);
+router.delete(`${table}/delete/:tableID`,auth,TableController.DeleteTable);
 export default router;
