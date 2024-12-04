@@ -13,11 +13,10 @@ export default class ProductController {
   static async SelectByCategory(req, res) {
     try {
       const categoryID = req.params.categoryID;
-      const select = `Select productID,product.categoryID,category.categoryName,product.unitID,unit.unitName,proName_la,
+      const select = `Select productID,product.categoryID,category.categoryName,proName_la,
       proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,status,
       product.createdAt,product.updatedAt from product
       INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID
-      INNER JOIN unit on product.unitID COLLATE utf8mb4_general_ci = unit.unitID
       WHERE product.categoryID=?`;
 
       connected.query(select, categoryID, (err, result) => {
@@ -32,11 +31,10 @@ export default class ProductController {
   static async SelectOne(req, res) {
     try {
       const productID = req.params.productID;
-      const select = `Select productID,product.categoryID,category.categoryName,product.unitID,unit.unitName,proName_la,
+      const select = `Select productID,product.categoryID,category.categoryName,proName_la,
       proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,status,
       product.createdAt,product.updatedAt from product
       INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID
-      INNER JOIN unit on product.unitID COLLATE utf8mb4_general_ci = unit.unitID
       WHERE productID=?`;
 
       connected.query(select, productID, (err, result) => {
@@ -53,8 +51,7 @@ export default class ProductController {
       const select = `Select productID,product.categoryID,category.categoryName,product.unitID,unit.unitName,proName_la,
       proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,status,
       product.createdAt,product.updatedAt from product
-      INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID
-      INNER JOIN unit on product.unitID COLLATE utf8mb4_general_ci = unit.unitID`;
+      INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID`;
 
       connected.query(select, (err, result) => {
         if (err)
@@ -70,7 +67,7 @@ export default class ProductController {
     try {
       const {
         categoryID,
-        unitID,
+
         proName_la,
         proName_en,
         proDetail_la,
@@ -80,7 +77,7 @@ export default class ProductController {
       } = req.body;
       const validate = await ValidateData({
         categoryID,
-        unitID,
+
         proName_la,
         proName_en,
         proDetail_la,
@@ -100,22 +97,18 @@ export default class ProductController {
       if (!checkCategory) {
         return SendError(res, 404, EMessage.NotFound + "category");
       }
-      const checkUnit = await FindOneUnit(unitID);
-      if (!checkUnit) {
-        return SendError(res, 404, EMessage.NotFound + "unit"); // ຕ້ອງສ້າງ module ຂື້ນມາໃນ service
-      }
+
       const img_url = await UploadImageToCloud(
         data.image.data,
         data.image.mimetype
       );
       if (!img_url) return SendError(res, 404, EMessage.EUpload);
       const inserted = `Insert into product 
-      (productID,categoryID,unitID,proName_la,proName_en,proDetail_la,proDetail_en,proPrice,proQty,image)
+      (productID,categoryID,proName_la,proName_en,proDetail_la,proDetail_en,proPrice,proQty,image)
       values (?,?,?,?,?,?,?,?,?,?)`;
       const newData = [
         productID,
         categoryID,
-        unitID,
         proName_la,
         proName_en,
         proDetail_la,
@@ -140,7 +133,7 @@ export default class ProductController {
       if (!checkProduct) return SendError(res, EMessage.NotFound, checkProduct);
       const {
         categoryID,
-        unitID,
+
         proName_la,
         proName_en,
         proDetail_la,
@@ -150,7 +143,7 @@ export default class ProductController {
       } = req.body;
       const validate = await ValidateData({
         categoryID,
-        unitID,
+
         proName_la,
         proName_en,
         proDetail_la,
@@ -169,22 +162,19 @@ export default class ProductController {
       if (!checkCategory) {
         return SendError(res, 404, EMessage.NotFound + "category");
       }
-      const checkUnit = await FindOneUnit(unitID);
-      if (!checkUnit) {
-        return SendError(res, 404, EMessage.NotFound + "unit"); // ຕ້ອງສ້າງ module ຂື້ນມາໃນ service
-      }
+     
       const img_url = await UploadImageToCloud(
         data.image.data,
         data.image.mimetype
       );
       if (!img_url) return SendError(res, 404, EMessage.EUpload);
       const updated = `Update product set 
-      categoryID=?,unitID=?,proName_la=?,proName_en=?,
+      categoryID=?,proName_la=?,proName_en=?,
       proDetail_la=?,proDetail_en=?,proPrice=?,proQty=?,image=?
       where productID =?`;
       const newData = [
         categoryID,
-        unitID,
+
         proName_la,
         proName_en,
         proDetail_la,

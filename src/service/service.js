@@ -42,7 +42,7 @@ export const GenerateQR = (data) => {
       // Get the base64 url
       QRCode.toDataURL(stringdata, (err, url) => {
         if (err) reject(err);
-       // console.log(`=====>2${url}`);
+        //console.log(`=====>2${url}`);
         resovle(url)
       });
     } catch (error) {
@@ -82,6 +82,34 @@ export const FindOneTable = (tableID) => {
         if (err) reject(EMessage.NotFound + err);
         if (!result[0]) reject(EMessage.NotFound + "table");
         resovle(result[0]);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+export const FindOneOrder = (orderID) => {
+  return new Promise(async (resovle, reject) => {
+    try {
+      const check = "Select * From orders where orderID=?";
+      connected.query(check, orderID, (err, result) => {
+        if (err) reject(EMessage.NotFound + err);
+        if (!result[0]) reject(EMessage.NotFound + "order");
+        resovle(result[0]);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+export const CheckStatusOrder = (status) => {
+  return new Promise(async (resovle, reject) => {
+    try {
+      const check = "Select * From orders where status=?";
+      connected.query(check, status, (err, result) => {
+        if (err) reject(EMessage.NotFound + err);
+        if (!result[0]) reject(EMessage.NotFound + "order");
+        resovle(result);
       });
     } catch (error) {
       reject(error);

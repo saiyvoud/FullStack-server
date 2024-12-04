@@ -2,6 +2,7 @@ import express from "express";
 import BannerController from "../controller/banner.js";
 import CategoryController from "../controller/category.js";
 import EmployeeController from "../controller/employee.js";
+import OrderController from "../controller/order.js";
 import ProductController from "../controller/product.js";
 import TableController from "../controller/table.js";
 import UnitController from "../controller/unit.js";
@@ -65,4 +66,13 @@ router.post(`${table}/insert`,auth,TableController.insert);
 router.put(`${table}/open/:tableID`,auth,TableController.OpenTable);
 router.put(`${table}/close/:tableID`,auth,TableController.CloseTable);
 router.delete(`${table}/delete/:tableID`,auth,TableController.DeleteTable);
+//-------- orders ------
+const order = "/order";
+router.get(`${order}/getAll`,auth,OrderController.SelectAll);
+router.get(`${order}/getOne/:orderID`,auth,OrderController.SelectOne);
+router.get(`${order}/getBy/:status`,auth,OrderController.SelectByStatus);
+router.post(`${order}/insert`,auth,OrderController.insert);
+router.put(`${order}/update/:orderID`,auth,OrderController.updateStatus);
+router.delete(`${order}/delete/:orderID`,auth,OrderController.DeleteOrders);
+
 export default router;
