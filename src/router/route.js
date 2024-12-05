@@ -3,6 +3,7 @@ import BannerController from "../controller/banner.js";
 import CategoryController from "../controller/category.js";
 import EmployeeController from "../controller/employee.js";
 import OrderController from "../controller/order.js";
+import OrderDetailController from "../controller/order_detail.js";
 import ProductController from "../controller/product.js";
 import TableController from "../controller/table.js";
 import UnitController from "../controller/unit.js";
@@ -74,5 +75,8 @@ router.get(`${order}/getBy/:status`,auth,OrderController.SelectByStatus);
 router.post(`${order}/insert`,auth,OrderController.insert);
 router.put(`${order}/update/:orderID`,auth,OrderController.updateStatus);
 router.delete(`${order}/delete/:orderID`,auth,OrderController.DeleteOrders);
-
+//-------- order_detail ------
+const order_detail = "/order_detail";
+router.get(`${order_detail}/getAll`,auth,OrderDetailController.SelectAll);
+router.post(`${order_detail}/insert`,auth,OrderDetailController.Insert);
 export default router;

@@ -70,7 +70,7 @@ export default class TableController {
         return SendError(res, 208, "Already Open Table");
       }
     
-      const update = "Update tables set status=? where tableID=?";
+      const update = "Update tables set tableStatus=? where tableID=?";
       connected.query(update, [status, tableID], (err) => {
         if (err) return SendError(res, 404, EMessage.Eupdate, err);
         return SendSuccess(res, SMessage.UpdateStatus);
@@ -93,7 +93,7 @@ export default class TableController {
       if(status === `${checkTableID.status}`){
         return SendError(res, 208, "Already close Table");
       }
-      const update = "Update tables set status=? where tableID=?";
+      const update = "Update tables set tableStatus=? where tableID=?";
       connected.query(update, [status, tableID], (err) => {
         if (err) return SendError(res, 404, EMessage.Eupdate, err);
         return SendSuccess(res, SMessage.UpdateStatus);

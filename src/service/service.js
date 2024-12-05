@@ -105,10 +105,10 @@ export const FindOneOrder = (orderID) => {
 export const CheckStatusOrder = (status) => {
   return new Promise(async (resovle, reject) => {
     try {
-      const check = "Select * From orders where status=?";
+      const check = "Select * From orders where orderStatus=?";
       connected.query(check, status, (err, result) => {
         if (err) reject(EMessage.NotFound + err);
-        if (!result[0]) reject(EMessage.NotFound + "order");
+        if (!result[0]) reject(EMessage.NotFound + "status");
         resovle(result);
       });
     } catch (error) {

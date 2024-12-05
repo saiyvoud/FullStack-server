@@ -14,7 +14,7 @@ export default class ProductController {
     try {
       const categoryID = req.params.categoryID;
       const select = `Select productID,product.categoryID,category.categoryName,proName_la,
-      proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,status,
+      proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,proStatus,
       product.createdAt,product.updatedAt from product
       INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID
       WHERE product.categoryID=?`;
@@ -32,7 +32,7 @@ export default class ProductController {
     try {
       const productID = req.params.productID;
       const select = `Select productID,product.categoryID,category.categoryName,proName_la,
-      proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,status,
+      proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,proStatus,
       product.createdAt,product.updatedAt from product
       INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID
       WHERE productID=?`;
@@ -48,8 +48,8 @@ export default class ProductController {
   }
   static async SelectAll(req, res) {
     try {
-      const select = `Select productID,product.categoryID,category.categoryName,product.unitID,unit.unitName,proName_la,
-      proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,status,
+      const select = `Select productID,product.categoryID,category.categoryName,proName_la,
+      proName_en,proDetail_la,proDetail_en,proPrice,proQty,product.image,proStatus,
       product.createdAt,product.updatedAt from product
       INNER JOIN category on product.categoryID COLLATE utf8mb4_general_ci = category.categoryID`;
 
@@ -67,7 +67,6 @@ export default class ProductController {
     try {
       const {
         categoryID,
-
         proName_la,
         proName_en,
         proDetail_la,
@@ -77,7 +76,6 @@ export default class ProductController {
       } = req.body;
       const validate = await ValidateData({
         categoryID,
-
         proName_la,
         proName_en,
         proDetail_la,
@@ -105,7 +103,7 @@ export default class ProductController {
       if (!img_url) return SendError(res, 404, EMessage.EUpload);
       const inserted = `Insert into product 
       (productID,categoryID,proName_la,proName_en,proDetail_la,proDetail_en,proPrice,proQty,image)
-      values (?,?,?,?,?,?,?,?,?,?)`;
+      values (?,?,?,?,?,?,?,?,?)`;
       const newData = [
         productID,
         categoryID,
@@ -217,7 +215,7 @@ export default class ProductController {
       if (!status) return SendError(res, 400, EMessage.BadRequest);
       const checkProduct = await FindOneProduct(productID);
       if (!checkProduct) return SendError(res, 404, EMessage.NotFound);
-      const updated = "update product set status=?  where productID=?";
+      const updated = "update product set proStatus=?  where productID=?";
       const newData = [status, productID];
       connected.query(updated, newData, (errUpdate) => {
         if (errUpdate) return SendError(res, 404, EMessage.NotFound, errUpdate);

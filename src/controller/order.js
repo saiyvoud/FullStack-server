@@ -4,12 +4,12 @@ import { EMessage, SMessage } from "../service/message.js";
 import { SendError, SendCreate, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid";
-import { FindOneOrder, FindOneTable } from "../service/service.js";
+import { CheckStatusOrder, FindOneOrder, FindOneTable } from "../service/service.js";
 
 export default class OrderController {
   static async SelectAll(req, res) {
     try {
-      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.status,orders.createdAt,orders.updatedAt from orders
+      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
           INNER JOIN tables on orders.tableID COLLATE utf8mb4_general_ci = tables.tableID`;
       connected.query(select, (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound + " order", err);
@@ -30,7 +30,7 @@ export default class OrderController {
       if (!checkOrder) {
         return SendError(res, 404, EMessage.NotFound + "orderID");
       }
-      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.status,orders.createdAt,orders.updatedAt from orders
+      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
           INNER JOIN tables on orders.tableID COLLATE utf8mb4_general_ci = tables.tableID
           WHERE orderID=?`;
       connected.query(select, orderID, (err, result) => {
@@ -48,13 +48,13 @@ export default class OrderController {
       if (!status) {
         return SendError(res, 400, EMessage.BadRequest);
       }
-      const checkOrder = await FindOneOrder(orderID);
+      const checkOrder = await CheckStatusOrder(status);
       if (!checkOrder) {
-        return SendError(res, 404, EMessage.NotFound + "orderID");
+        return SendError(res, 404, EMessage.NotFound + "status");
       }
-      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.status,orders.createdAt,orders.updatedAt from orders
+      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
           INNER JOIN tables on orders.tableID COLLATE utf8mb4_general_ci = tables.tableID
-          WHERE orders.status=?`;
+          WHERE orders.orderStatus=?`;
       connected.query(select, status, (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound + " order", err);
         if (!result[0]) return SendError(res, 404, EMessage.NotFound);
@@ -67,7 +67,7 @@ export default class OrderController {
   static async insert(req, res) {
     try {
       const { tableID } = req.body;
-      const validate = await ValidateData(req.body);
+      const validate = await ValidateData({tableID});
       if (validate.length > 0) {
         return SendError(res, 400, EMessage.BadRequest + validate.join(","));
       }
@@ -95,12 +95,12 @@ export default class OrderController {
         return SendError(res, 404, EMessage.NotFound + "orderID");
       }
       const { paymentType, priceTotal } = req.body;
-      const validate = await ValidateData(req.body);
+      const validate = await ValidateData({paymentType,priceTotal});
       if (validate.length > 0) {
         return SendError(res, 400, EMessage.BadRequest + validate.join(","));
       }
       const status = 1; // fix status ໃຫ້ success ເປັນປະຫວັດ
-      const updated = `Update orders set paymentType=?,priceTotal=?,status=? where orderID=?`;
+      const updated = `Update orders set paymentType=?,priceTotal=?,orderStatus=? where orderID=?`;
       connected.query(
         updated,
         [paymentType, priceTotal, status, orderID],
