@@ -10,6 +10,20 @@ import { SendError, SendCreate, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
 import { v4 as uuidv4 } from "uuid";
 export default class ProductController {
+  static async SearchProduct(req, res) {
+    try {
+      const search = req.query.search;  // Assume 'search' is the user-provided input
+      const query = `SELECT * FROM product WHERE proName_la LIKE ?`;
+      const values = [`%${search}%`];  // Add wildcards around the search term
+      connected.query(query,values, (err, result) => {
+        if (err) return SendError(res, 404, EMessage.NotFound, err);
+        if (!result[0]) return SendError(res, 404, EMessage.NotFound);
+        return SendSuccess(res, SMessage.SearchProduct, result);
+      });
+    } catch (error) {
+      return SendError(res, 500, EMessage.Eserver, error);
+    }
+  }
   static async SelectByCategory(req, res) {
     try {
       const categoryID = req.params.categoryID;
@@ -160,7 +174,7 @@ export default class ProductController {
       if (!checkCategory) {
         return SendError(res, 404, EMessage.NotFound + "category");
       }
-     
+
       const img_url = await UploadImageToCloud(
         data.image.data,
         data.image.mimetype

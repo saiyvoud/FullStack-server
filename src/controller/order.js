@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CheckStatusOrder, FindOneOrder, FindOneTable } from "../service/service.js";
 
 export default class OrderController {
+ 
   static async SelectAll(req, res) {
     try {
       const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders

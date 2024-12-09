@@ -53,6 +53,7 @@ router.delete(`${banner}/delete/:bannerID`,auth,BannerController.deleteBanner);
 //------ product -----
 const product = "/product";
 router.get(`${product}/getAll`,auth,ProductController.SelectAll);
+router.get(`${product}/search`,auth,ProductController.SearchProduct);
 router.get(`${product}/getOne/:productID`,auth,ProductController.SelectOne);
 router.get(`${product}/getByCategory/:categoryID`,auth,ProductController.SelectByCategory);
 router.post(`${product}/insert`,auth,ProductController.insert);
@@ -77,6 +78,11 @@ router.put(`${order}/update/:orderID`,auth,OrderController.updateStatus);
 router.delete(`${order}/delete/:orderID`,auth,OrderController.DeleteOrders);
 //-------- order_detail ------
 const order_detail = "/order_detail";
+router.get(`${order_detail}/getOne/:order_detail_ID`,auth,OrderDetailController.SelectOne);
+router.get(`${order_detail}/getBy/:orderID`,auth,OrderDetailController.SelectBy);
 router.get(`${order_detail}/getAll`,auth,OrderDetailController.SelectAll);
 router.post(`${order_detail}/insert`,auth,OrderDetailController.Insert);
+router.put(`${order_detail}/update/:order_detail_ID`,auth,OrderDetailController.UpdateOrderDetail);
+router.delete(`${order_detail}/delete/:order_detail_ID`,auth,OrderDetailController.DeleteOrderDetail);
+
 export default router;

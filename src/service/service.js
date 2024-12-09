@@ -116,6 +116,20 @@ export const CheckStatusOrder = (status) => {
     }
   });
 };
+export const CheckOrderDetail = (order_detail_ID) => {
+  return new Promise(async (resovle, reject) => {
+    try {
+      const check = "Select * From order_detail where order_detail_ID=?";
+      connected.query(check, order_detail_ID, (err, result) => {
+        if (err) reject(EMessage.NotFound + err);
+        if (!result[0]) reject(EMessage.NotFound + "order_detail_ID");
+        resovle(result[0]);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 export const FindCheckTable = (tableID) => {
   return new Promise(async (resovle, reject) => {
     try {

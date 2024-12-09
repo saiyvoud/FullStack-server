@@ -18,6 +18,7 @@ export const SMessage = {
   Updated: "Updated Success",
   Delete: "Delete Success",
   UpdateStatus: "Update Status Success",
+  SearchProduct: "Search Product Success",
 };
 //Error Message
 export const EMessage = {
