@@ -31,3 +31,23 @@ export const UploadImageToCloud = async (files, type, oldImg) => {
     return "";
   }
 };
+export const UploadQRCodeToCloud = async (files, oldImg) => {
+  try {
+    if (oldImg) {
+      const spliturl = oldImg.split("/");
+      const img_id = spliturl[spliturl.length - 1].split(".")[0];
+      await cloudinary.uploader.destroy(img_id);
+    }
+
+    const cloudinaryUpload = await cloudinary.v2.uploader.upload(files, {
+      //   public_id: `IMG_${Date.now()}`,
+      folder: "images1",
+      resource_type: "image",
+    });
+    console.log(cloudinaryUpload.url);
+    return cloudinaryUpload.url;
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+};

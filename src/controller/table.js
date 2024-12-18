@@ -1,4 +1,4 @@
-import { UploadImageToCloud } from "../config/cloudinary.js";
+import { UploadImageToCloud, UploadQRCodeToCloud } from "../config/cloudinary.js";
 import connected from "../config/db_mysql.js";
 import { EMessage, SMessage } from "../service/message.js";
 import { SendError, SendCreate, SendSuccess } from "../service/response.js";
@@ -45,8 +45,12 @@ export default class TableController {
         tableName: tableName,
       };
       const generateQR = await GenerateQR(data);
+      const img_url = await UploadQRCodeToCloud(generateQR)
+      if(!img_url){
+        return SendError(res,404,EMessage.EUpload);
+      }
       const inserted = `insert into tables (tableID,tableName,qrcode) values (?,?,?)`;
-      connected.query(inserted, [tableID, tableName, generateQR], (err) => {
+      connected.query(inserted, [tableID, tableName, img_url], (err) => {
         if (err) return SendError(res, 404, EMessage.NotFound, err);
         return SendCreate(res, SMessage.Insert);
       });

@@ -37,9 +37,10 @@ export const GenerateQR = (data) => {
       // QRCode.toString(stringdata, { type: "terminal" }, (err, url) => {
       //   if (err) return console.log("error occurred");
       //   console.log(`=====>1${url}`);
+      //  // resovle(url)
       // });
 
-      // Get the base64 url
+      // // Get the base64 url
       QRCode.toDataURL(stringdata, (err, url) => {
         if (err) reject(err);
         //console.log(`=====>2${url}`);
