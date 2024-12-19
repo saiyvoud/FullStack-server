@@ -52,10 +52,10 @@ router.put(`${banner}/update/:bannerID`,auth,BannerController.updatedBanner);
 router.delete(`${banner}/delete/:bannerID`,auth,BannerController.deleteBanner);
 //------ product -----
 const product = "/product";
-router.get(`${product}/getAll`,auth,ProductController.SelectAll);
-router.get(`${product}/search`,auth,ProductController.SearchProduct);
+router.get(`${product}/getAll`,ProductController.SelectAll);
+router.get(`${product}/search`,ProductController.SearchProduct);
 router.get(`${product}/getOne/:productID`,auth,ProductController.SelectOne);
-router.get(`${product}/getByCategory/:categoryID`,auth,ProductController.SelectByCategory);
+router.get(`${product}/getByCategory/:categoryID`,ProductController.SelectByCategory);
 router.post(`${product}/insert`,auth,ProductController.insert);
 router.put(`${product}/update/:productID`,auth,ProductController.updateProduct);
 router.put(`${product}/updateStatus/:productID`,auth,ProductController.updateStatus);
