@@ -1,10 +1,10 @@
 import mysql from "mysql";
 
 const connected = mysql.createPool({
-  host: "mysql-189252-0.cloudclusters.net",
-  port: "10034",
+  host: "mysql-189700-0.cloudclusters.net",
+  port: "19666",
   user: "admin",
-  password: "QZuCyO6Q",
+  password: "oah7MNJ2",
   database: "db_restaurant",
   waitForConnections: true, // Wait for connections when the pool is full
   connectionLimit: 10, // Maximum number of connections in the pool
