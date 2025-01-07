@@ -79,7 +79,7 @@ export default class OrderController {
       values(?,?)`;
       connected.query(insert, [orderID, tableID], (err) => {
         if (err) return SendError(res, 404, EMessage.EInsert, err);
-        return SendCreate(res, SMessage.Insert);
+        return SendCreate(res, SMessage.Insert,orderID);
       });
     } catch (error) {
       return SendError(res, 500, EMessage.Eserver, error);
