@@ -54,8 +54,9 @@ export default class OrderController {
       if (!checkOrder) {
         return SendError(res, 404, EMessage.NotFound + "status");
       }
-      const select = `Select orderID,orders.userID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
+      const select = `Select orderID,orders.userID,user.username,user.phoneNumber,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
           INNER JOIN tables on orders.tableID COLLATE utf8mb4_general_ci = tables.tableID
+          INNER JOIN user on orders.userID COLLATE utf8mb4_general_ci = user.userID
           WHERE orders.orderStatus=? and orders.userID=?`;
       connected.query(select, [status,userID], (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound + " order", err);
