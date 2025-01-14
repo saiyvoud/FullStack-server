@@ -46,6 +46,7 @@ export default class OrderController {
   static async SelectByStatus(req, res) {
     try {
       const status = req.params.status;
+      const userID = req.user;
       if (!status) {
         return SendError(res, 400, EMessage.BadRequest);
       }
@@ -53,10 +54,10 @@ export default class OrderController {
       if (!checkOrder) {
         return SendError(res, 404, EMessage.NotFound + "status");
       }
-      const select = `Select orderID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
+      const select = `Select orderID,orders.userID,paymentType,priceTotal,orders.tableID,tables.tableName,orders.orderStatus,orders.createdAt,orders.updatedAt from orders
           INNER JOIN tables on orders.tableID COLLATE utf8mb4_general_ci = tables.tableID
-          WHERE orders.orderStatus=?`;
-      connected.query(select, status, (err, result) => {
+          WHERE orders.orderStatus=? and orders.userID=?`;
+      connected.query(select, [status,userID], (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound + " order", err);
         if (!result[0]) return SendError(res, 404, EMessage.NotFound);
         return SendSuccess(res, SMessage.SelectBy, result);
@@ -68,6 +69,7 @@ export default class OrderController {
   static async insert(req, res) {
     try {
       const { tableID } = req.body;
+      const userID = req.user;
       const validate = await ValidateData({tableID});
       if (validate.length > 0) {
         return SendError(res, 400, EMessage.BadRequest + validate.join(","));
@@ -75,9 +77,9 @@ export default class OrderController {
       const orderID = uuidv4();
       const checkTableID = await FindOneTable(tableID);
       if (!checkTableID) return SendError(res, 404, EMessage.NotFound);
-      const insert = `Insert into orders (orderID,tableID) 
-      values(?,?)`;
-      connected.query(insert, [orderID, tableID], (err) => {
+      const insert = `Insert into orders (orderID,tableID,userID) 
+      values(?,?,?)`;
+      connected.query(insert, [orderID, tableID,userID], (err) => {
         if (err) return SendError(res, 404, EMessage.EInsert, err);
         return SendCreate(res, SMessage.Insert,orderID);
       });

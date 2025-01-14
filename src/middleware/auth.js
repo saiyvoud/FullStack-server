@@ -13,7 +13,7 @@ export const auth = async (req, res, next) => {
     const verify = await VerifyToken(token); //Must be Create Function Module
     if (!verify) return SendError(res, 401, EMessage.Uaunthorizate);
 
-    req.user = verify;
+    req.user = verify; // userid local storage
 
     next();
   } catch (error) {
