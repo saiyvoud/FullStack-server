@@ -3,10 +3,21 @@ import { v4 as uuidv4 } from "uuid";
 import { EMessage, Role, SMessage } from "../service/message.js";
 import { SendCreate, SendError, SendSuccess } from "../service/response.js";
 import { ValidateData } from "../service/validate.js";
-import { Decrypt, Encrypt, GenerateToken } from "../service/service.js";
+import { Decrypt, Encrypt, GenerateToken,VerifyRefreshToken } from "../service/service.js";
 import { UploadImageToCloud } from "../config/cloudinary.js";
 import { UploadImageToServer } from "../service/uploadImageToServer.js";
 export default class UserCotroller {
+  static async RefreshToken (req,res){
+    try {
+      const {refreshToken} = req.body;
+      if(!refreshToken) return SendError(res,400,EMessage.BadRequest + " refreshToken");
+      const verify = await VerifyRefreshToken(refreshToken); // ສ້າງ service
+      if(!verify) return SendError(res,404,EMessage.NotFound);
+      return SendSuccess(res,SMessage.Updated , verify);
+    } catch (error) {
+      return SendError(res, 500, EMessage.ServerError, error);
+    }
+  }
   static async SelectOne(req, res) {
     try {
       const userID = req.params.userID;

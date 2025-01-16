@@ -10,6 +10,27 @@ export const Decrypt = async (data) => {
 export const Encrypt = async (data) => {
   return CryptoJS.AES.encrypt(data, SECRET_KEY).toString();
 };
+export const VerifyRefreshToken = async (refresh) => {
+  return new Promise(async (resovle, reject) => {
+    try {
+      jwt.verify(refresh, SECRET_KEY_REFRESH.toString(), async (err, decode) => {
+        if (err) reject(err);
+      
+        const checkUuid = "Select * from user where userID=?";
+        connected.query(checkUuid, decode.id, async (error, result) => {
+          if (error) reject(error);
+          if (!result[0]) reject(EMessage.Unauthorized);
+          const token = await GenerateToken(result[0]["userID"]);
+          if (!token) reject("Error Genpassword");
+          resovle(token);
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
+  });
+};
 export const VerifyToken = async (token) => {
   return new Promise(async (resovle, reject) => {
     try {

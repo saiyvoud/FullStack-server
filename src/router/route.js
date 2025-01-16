@@ -17,6 +17,7 @@ router.get(`${user}/getAll`,auth,UserCotroller.SelectAll);
 router.get(`${user}/getOne/:userID`,auth,UserCotroller.SelectOne);
 router.post(`${user}/login`, UserCotroller.Login);
 router.post(`${user}/register`, UserCotroller.Register);
+router.put(`${user}/refreshToken`, UserCotroller.RefreshToken);
 router.put(`${user}/forgot`,UserCotroller.ForgetPassword);
 router.put(`${user}/changePassword`,auth,UserCotroller.ChangePassword);
 router.put(`${user}/edit`,auth,UserCotroller.EditProfile);
