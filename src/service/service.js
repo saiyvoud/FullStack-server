@@ -13,21 +13,28 @@ export const Encrypt = async (data) => {
 export const VerifyRefreshToken = async (refresh) => {
   return new Promise(async (resovle, reject) => {
     try {
-      jwt.verify(refresh, SECRET_KEY_REFRESH.toString(), async (err, decode) => {
-        if (err) reject(err);
-      
-        const checkUuid = "Select * from user where userID=?";
-        connected.query(checkUuid, decode.id, async (error, result) => {
-          if (error) reject(error);
-          if (!result[0]) reject(EMessage.Unauthorized);
-          const token = await GenerateToken(result[0]["userID"]);
-          if (!token) reject("Error Genpassword");
-          resovle(token);
-        });
-      });
+      jwt.verify(
+        refresh,
+        SECRET_KEY_REFRESH.toString(),
+        async (err, decode) => {
+          if (err) reject(err);
+
+          if (decode === undefined) {
+            return reject("invaild token");
+          }
+          const checkUuid = "Select * from user where userID=?";
+          connected.query(checkUuid, decode.id, async (error, result) => {
+            if (error) reject(error);
+            if (!result[0]) reject(EMessage.Unauthorized);
+            const token = await GenerateToken(result[0]["userID"]);
+            if (!token) reject("Error Genpassword");
+            resovle(token);
+          });
+        }
+      );
     } catch (error) {
       console.log(error);
-      reject(error);
+      return reject(error);
     }
   });
 };
@@ -36,7 +43,9 @@ export const VerifyToken = async (token) => {
     try {
       jwt.verify(token, SECRET_KEY.toString(), (err, decode) => {
         if (err) reject(err);
-
+        if (decode === undefined) {
+          return reject("invaild token");
+        }
         const checkUserID = "select * from user where userID=?";
         connected.query(checkUserID, decode["id"], (isErr, result) => {
           if (isErr) reject(isErr);
@@ -46,7 +55,7 @@ export const VerifyToken = async (token) => {
         });
       });
     } catch (error) {
-      reject(error);
+      return reject(error);
     }
   });
 };
@@ -54,7 +63,7 @@ export const GenerateQR = (data) => {
   return new Promise(async (resovle, reject) => {
     try {
       const stringdata = JSON.stringify(data);
-   // ----- ສະແດງເປັນຮູບ
+      // ----- ສະແດງເປັນຮູບ
       // QRCode.toString(stringdata, { type: "terminal" }, (err, url) => {
       //   if (err) return console.log("error occurred");
       //   console.log(`=====>1${url}`);
@@ -65,7 +74,7 @@ export const GenerateQR = (data) => {
       QRCode.toDataURL(stringdata, (err, url) => {
         if (err) reject(err);
         //console.log(`=====>2${url}`);
-        resovle(url)
+        resovle(url);
       });
     } catch (error) {
       reject(error);
