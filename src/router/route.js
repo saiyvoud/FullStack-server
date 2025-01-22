@@ -14,7 +14,7 @@ const router = express.Router();
 // ------ auth ------
 const user = "/user";
 router.get(`${user}/getAll`,auth,UserCotroller.SelectAll);
-router.get(`${user}/getOne/:userID`,auth,UserCotroller.SelectOne);
+router.get(`${user}/getOne`,auth,UserCotroller.SelectOne);
 router.post(`${user}/login`, UserCotroller.Login);
 router.post(`${user}/register`, UserCotroller.Register);
 router.put(`${user}/refreshToken`, UserCotroller.RefreshToken);

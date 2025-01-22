@@ -20,7 +20,7 @@ export default class UserCotroller {
   }
   static async SelectOne(req, res) {
     try {
-      const userID = req.params.userID;
+      const userID = req.user;
       const select = "Select * from user where userID=?";
       connected.query(select, userID, (err, result) => {
         if (err) return SendError(res, 404, EMessage.NotFound + "user");
